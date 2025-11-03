@@ -39,19 +39,45 @@
       margin-top: 10px;
     }
     button:hover { background: #444; }
-    .reward {
+    .reward { margin-top: 15px; }
+    a { text-decoration: none; color: #e63946; font-weight: 600; }
+    .rules {
+      background: #fff7e6;
+      border: 1px solid #ffe4b5;
+      border-radius: 16px;
+      padding: 15px;
+      max-width: 420px;
+      margin: 20px auto;
+      font-size: 0.95em;
+      color: #444;
+    }
+    .rules h3 { margin-top: 0; color: #e76f51; }
+    .example { font-style: italic; color: #666; }
+    #nextBtn {
+      display: none;
       margin-top: 15px;
+      background: #e63946;
     }
-    a {
-      text-decoration: none;
-      color: #e63946;
-      font-weight: 600;
-    }
+    #nextBtn:hover { background: #c71c34; }
   </style>
 </head>
 <body>
   <h2>✨ Memory Box for Tejashri ✨</h2>
-  <p>Answer the questions correctly to unlock your rewards ❤️</p>
+  <p>Answer each question correctly to unlock a memory or surprise ❤️</p>
+
+  <div class="rules">
+    <h3>🧠 How to Play</h3>
+    <p>There are a few memory-based questions waiting for you. Each correct answer unlocks a hidden surprise  something that connects to a shared moment or emotion.</p>
+    <ul style="text-align:left; display:inline-block;">
+      <li>Read each question carefully  it’s about something "only you’d know" </li>
+      <li>Type your answer in lowercase (like <b>ranbir kapoor</b> instead of <b>Ranbir Kapoor</b>).</li>
+      <li>When your answer is right, a reward link and a “Next Question” button will appear 💌</li>
+      <li>Open your reward and then click “Next Question” to continue the game!</li>
+    </ul>
+    <p class="example">Example:<br>
+    Q: “Name of the city you were born in?”<br>
+    Ans: <b>nadiad</b> → Unlocks a surprise related to that question and topic 🖤</p>
+  </div>
 
   <div class="card" id="qbox">
     <p id="question"></p>
@@ -60,6 +86,7 @@
     <button onclick="checkAnswer()">Unlock</button>
     <p id="msg"></p>
     <div class="reward" id="reward"></div>
+    <button id="nextBtn" onclick="nextQuestion()">Next Question →</button>
   </div>
 
   <script>
@@ -70,29 +97,34 @@
         r: "https://dummy.link/tum-ho-toh"
       },
       {
-        q: "A cute-looking picture of you after badminton (a game you played after a very long time physically)?",
-        a: "badminton",
-        r: "https://dummy.link/badminton-photo"
-      },
-      {
-        q: "Which color you love to wear in clothes?",
+        q: "Which is the colour you love the most to wear in clothes?",
         a: "black",
-        r: "https://dummy.link/black-theme"
+        r: "https://drive.google.com/file/d/1H3XOQoBYhNG4XrpfWg2fFkFTgKdpLxZg/view?usp=drive_link"
       },
       {
         q: "The thing you usually do to make yourself feel lighter?",
         a: "cry",
-        r: "https://dummy.link/cry-video"
+        r: "https://drive.google.com/file/d/11d2TyEDT54X81_SZw2hblkh8e6vwSvni/view?usp=drive_link"
+      },
+      {
+        q: "A game you played after a long time (physical game) ?",
+        a: "badminton",
+        r: "https://drive.google.com/file/d/1S8sqMTk4o2mWUKRWL9jVEEy3M_DSLU8T/view?usp=drive_link"
       },
       {
         q: "Of which singer were you the fangirl in your teenage?",
         a: "darshan raval",
-        r: "https://dummy.link/darshan-raval"
+        r: "https://drive.google.com/file/d/1po2Due3qVY6AyYe4Qu5tlMc2zpuUQXT8/view?usp=drive_link"
       },
       {
-        q: "Your favorite sabji in India (in Punjabi)?",
+        q: "Your favorite sabji in India which you definitely order in restaurant (in Punjabi)?", 
         a: "cheese butter masala",
-        r: "https://dummy.link/cheese-butter-masala"
+        r: "https://drive.google.com/file/d/1nNUKP7uah_hdUIbZvcaIf4LrJZ4gJ9zd/view?usp=drive_link"
+      },
+      {
+        q: "Bonus Question: What colour of shirt I was wearing when we met for the first time?",
+        a: "black",
+        r: "https://drive.google.com/file/d/1k9cYAKx7FnYB7XxbxINHYqeABP0DwPn-/view?usp=drive_link"
       }
     ];
 
@@ -103,6 +135,7 @@
       document.getElementById('ans').value = "";
       document.getElementById('msg').innerText = "";
       document.getElementById('reward').innerHTML = "";
+      document.getElementById('nextBtn').style.display = "none";
     }
 
     function checkAnswer() {
@@ -111,22 +144,26 @@
 
       if (val === correct) {
         document.getElementById('msg').innerText = "✅ Correct!";
-        document.getElementById('reward').innerHTML = 
+        document.getElementById('reward').innerHTML =
           `<p><a href="${puzzles[current].r}" target="_blank">🎁 Open Your Reward</a></p>`;
-
-        if (current < puzzles.length - 1) {
-          setTimeout(() => {
-            current++;
-            loadQuestion();
-          }, 2000);
-        } else {
-          document.getElementById('question').innerText = "🎉 You unlocked all memories!";
-          document.getElementById('ans').style.display = "none";
-          document.getElementById('msg').innerText = "Every memory you remembered made me smile ❤️";
-        }
+        document.getElementById('nextBtn').style.display = "inline-block";
       } else {
         document.getElementById('msg').innerText = "❌ Not quite — try again ♥";
         document.getElementById('reward').innerHTML = "";
+        document.getElementById('nextBtn').style.display = "none";
+      }
+    }
+
+    function nextQuestion() {
+      if (current < puzzles.length - 1) {
+        current++;
+        loadQuestion();
+      } else {
+        document.getElementById('question').innerText = "🎉 You unlocked all memories!";
+        document.getElementById('ans').style.display = "none";
+        document.getElementById('msg').innerText = "Every memory you remembered made me smile ❤️";
+        document.getElementById('reward').innerHTML = "";
+        document.getElementById('nextBtn').style.display = "none";
       }
     }
 
